@@ -1,10 +1,21 @@
 using BlazorECommerce.Components;
+using BlazorECommerce.Models;
+using BlazorECommerce.Services;
+using Microsoft.EntityFrameworkCore;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+builder.Services.AddDbContext<ECommerceContext>(
+    options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), 
+    x => x.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery))
+    );
+builder.Services.AddScoped<UsersService>();
+
+builder.Services.AddMudServices();
 
 var app = builder.Build();
 
